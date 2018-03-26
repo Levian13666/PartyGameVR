@@ -6,16 +6,23 @@ using InControl;
 public class PlayerController : MonoBehaviour {
 
     public InputDevice Device { get; set; }
+    public string playername;
+    public int index;
 
-    bool hasTheBomb = false;
+    [SerializeField] TextMesh playernameText;
 
-	// Use this for initialization
 	void Start () {
-		
+		foreach(MonoBehaviour script in GetComponents(typeof(MonoBehaviour))) {
+            script.enabled = false;
+        }
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    public void SetPlayername(string _name) {
+        playername = _name;
+        playernameText.text = _name;
+    }
 }
