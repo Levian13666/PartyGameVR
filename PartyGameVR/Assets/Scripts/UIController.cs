@@ -5,9 +5,15 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
 
+    public GameObject PassTheBombUI;
+
     [SerializeField] GameObject statusTxt;
 
-	public void SetStatusText(string _txt) {
+    private void Start() {
+        PassTheBombUI.SetActive(false);
+    }
+
+    public void SetStatusText(string _txt) {
         statusTxt.gameObject.SetActive(true);
         statusTxt.GetComponentInChildren<Text>().text = _txt;
         statusTxt.GetComponent<Animator>().SetTrigger("Show");

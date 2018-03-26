@@ -5,14 +5,17 @@ using UnityEngine;
 public class PassTheBomb : MonoBehaviour {
 
     PlayerController[] players;
+    PassTheBombUI UI;
 
+    public int pointsPrSecond = 1;
     public bool gameStarted = false;
-    bool isBombInPlay = false;
+    public bool isBombInPlay = false;
 
     float bombTime;
 
     void Start() {
         players = GetComponent<GameController>().players;
+        UI = GetComponent<GameController>().UIController.PassTheBombUI.GetComponent<PassTheBombUI>();
         StartCoroutine(StartGame());
     }
 
@@ -37,11 +40,15 @@ public class PassTheBomb : MonoBehaviour {
 
     IEnumerator StartGame() {
         gameStarted = true;
-        foreach (PlayerController player in players) {
+        for(int i = 0; i < players.Length; i++) {
+            PlayerController player = players[i];
             if (player != null) {
                 player.GetComponent<PassTheBombPlayer>().enabled = true;
+                player.GetComponent<PassTheBombPlayer>().playerUI = UI.playerUIWrapper.GetChild(i).GetComponent<PassTheBombPlayerUI>();
+                player.GetComponent<PassTheBombPlayer>().playerUI.ShowUI(true);
             }
         }
+        UI.gameObject.SetActive(true);
 
         GetComponent<GameController>().UIController.SetStatusText("Ny runde starter");
 

@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour {
             var inputDevice = InputManager.ActiveDevice;
 
             if (JoinButtonWasPressedOnDevice(inputDevice)) {
+                print(inputDevice);
                 if (ThereIsNoPlayerUsingDevice(inputDevice)) {
                     CreatePlayer(inputDevice);
                 }
@@ -34,10 +35,7 @@ public class GameController : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Return)) {
                 StartGame();
             }
-        } else {
-            
         }
-
     }
 
     bool JoinButtonWasPressedOnDevice(InputDevice inputDevice) {

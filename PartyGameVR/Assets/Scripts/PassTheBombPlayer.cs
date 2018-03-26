@@ -6,6 +6,9 @@ using InControl;
 public class PassTheBombPlayer : MonoBehaviour {
 
     public bool hasBomb = false;
+    public float totalPoints = 0;
+    public float currentPoints = 0;
+    public PassTheBombPlayerUI playerUI;
 
     [SerializeField] GameObject bomb;
     InputDevice inputDevice;
@@ -21,22 +24,29 @@ public class PassTheBombPlayer : MonoBehaviour {
         bomb.SetActive(hasBomb);
 
         if (hasBomb) {
-            if (inputDevice.Action1.WasPressed) {
-                playerIndex = 0; // Kryds
-            } else if (inputDevice.Action2.WasPressed) {
-                playerIndex = 1; // Rund
-            } else if (inputDevice.Action3.WasPressed) {
-                playerIndex = 2; // Firkant
-            } else if (inputDevice.Action4.WasPressed) {
-                playerIndex = 3; // Trekant
+            if (controller.isBombInPlay) {
+                currentPoints += controller.pointsPrSecond * Time.deltaTime;
+                playerUI.SetCurrentPoints(currentPoints);
+
+                if (inputDevice.Action1.WasPressed) {
+                    playerIndex = 0; // Kryds
+                } else if (inputDevice.Action2.WasPressed) {
+                    playerIndex = 1; // Rund
+                } else if (inputDevice.Action3.WasPressed) {
+                    playerIndex = 2; // Firkant
+                } else if (inputDevice.Action4.WasPressed) {
+                    playerIndex = 3; // Trekant
+                } else {
+                    playerIndex = -1;
+                }
+
+                if (playerIndex != -1 && GetComponent<PlayerController>().index != playerIndex) {
+                    controller.SendBombToPlayer(GetComponent<PlayerController>().index, playerIndex);
+                }
             } else {
-                playerIndex = -1;
+                currentPoints = 0;
+                playerUI.SetCurrentPoints(currentPoints);
             }
-
-            if (playerIndex != -1 && GetComponent<PlayerController>().index != playerIndex) {
-                controller.SendBombToPlayer(GetComponent<PlayerController>().index, playerIndex);
-            }
-
         }
     }
 
@@ -50,5 +60,8 @@ public class PassTheBombPlayer : MonoBehaviour {
 
     public void Restart() {
         hasBomb = false;
+        totalPoints += currentPoints;
+        playerUI.SetTotalPoints(totalPoints);
+        currentPoints = 0;
     }
 }
