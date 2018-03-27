@@ -11,11 +11,16 @@ public class PassTheBomb : MonoBehaviour {
     public bool gameStarted = false;
     public bool isBombInPlay = false;
 
+    [SerializeField] AudioClip tickingBomb;
+    [SerializeField] AudioClip explodingBomb;
+
+    AudioSource audioSource;
     float bombTime;
 
     void Start() {
         players = GetComponent<GameController>().players;
         UI = GetComponent<GameController>().UIController.PassTheBombUI.GetComponent<PassTheBombUI>();
+        audioSource = GetComponent<AudioSource>();
         StartCoroutine(StartGame());
     }
 
@@ -67,12 +72,19 @@ public class PassTheBomb : MonoBehaviour {
         playerGetBomb.GetComponent<PassTheBombPlayer>().hasBomb = true;
         GetComponent<GameController>().UIController.SetStatusText(playerGetBomb.playername + " har bomben!");
 
+        audioSource.clip = tickingBomb;
+        audioSource.loop = true;
+        audioSource.Play();
+
         bombTime = Random.Range(5f, 10f);
     }
 
     void BlowBomb() {
         print("Bomben sprang!");
-
+        audioSource.Stop();
+        //audioSource.clip = explodingBomb;
+        //audioSource.loop = false;
+        audioSource.PlayOneShot(explodingBomb);
 
     }
 

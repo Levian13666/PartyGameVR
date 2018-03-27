@@ -26,7 +26,6 @@ public class GameController : MonoBehaviour {
             var inputDevice = InputManager.ActiveDevice;
 
             if (JoinButtonWasPressedOnDevice(inputDevice)) {
-                print(inputDevice);
                 if (ThereIsNoPlayerUsingDevice(inputDevice)) {
                     CreatePlayer(inputDevice);
                 }

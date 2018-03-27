@@ -18,6 +18,7 @@ public class PassTheBombPlayer : MonoBehaviour {
     void Start() {
         inputDevice = GetComponent<PlayerController>().Device;
         controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<PassTheBomb>();
+        playerUI.SetPlayername(GetComponent<PlayerController>().playername);
     }
 
     void Update() {
