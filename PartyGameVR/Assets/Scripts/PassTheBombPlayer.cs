@@ -15,17 +15,25 @@ public class PassTheBombPlayer : MonoBehaviour {
     PassTheBomb controller;
     int playerIndex;
 
+	float bombVibHaving = 0.1f;
+	[Range(0,1f)]
+	public float bombVibExplode = 0f;
+
     void Start() {
         inputDevice = GetComponent<PlayerController>().Device;
         controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<PassTheBomb>();
         playerUI.SetPlayername(GetComponent<PlayerController>().playername);
-    }
+
+		inputDevice.SetLightColor (Color.red);
+
+	}
 
     void Update() {
         bomb.SetActive(hasBomb);
 
         if (hasBomb) {
-            if (controller.isBombInPlay) {
+			if (controller.isBombInPlay) {
+				inputDevice.Vibrate (bombVibHaving);
                 currentPoints += controller.pointsPrSecond * Time.deltaTime;
                 playerUI.SetCurrentPoints(currentPoints);
 
@@ -47,9 +55,14 @@ public class PassTheBombPlayer : MonoBehaviour {
             } else {
                 currentPoints = 0;
                 playerUI.SetCurrentPoints(currentPoints);
+				inputDevice.StopVibration ();
             }
         }
     }
+
+	public void BombExploded() {
+		inputDevice.Vibrate (bombVibExplode);
+	}
 
     public void ReceiveBomb() {
         hasBomb = true;

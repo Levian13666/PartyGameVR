@@ -399,7 +399,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playername: 
+  index: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   playernameText: {fileID: 102101601516625072}
+  model: {fileID: 1898574860876356}
 --- !u!114 &114525671721954644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -412,7 +415,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasBomb: 0
+  totalPoints: 0
+  currentPoints: 0
+  playerUI: {fileID: 0}
   bomb: {fileID: 1655751516160688}
+  bombVibExplode: 0
 --- !u!135 &135557228158540776
 SphereCollider:
   m_ObjectHideFlags: 1

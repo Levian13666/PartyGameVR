@@ -101,6 +101,7 @@ namespace InControl
 			{
 				var inputDevice = InputManager.Devices[i];
 				inputDevice.Vibrate( inputDevice.LeftTrigger, inputDevice.RightTrigger );
+				inputDevice.SetLightColor (Color.red);
 			}
 		}
 

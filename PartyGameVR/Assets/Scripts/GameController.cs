@@ -12,8 +12,9 @@ public class GameController : MonoBehaviour {
     public Transform playerPositions;
     public Transform playersWrapper;
     public PlayerController[] players = new PlayerController[4];
+	public Color[] playerColors;
 
-    bool searchForNewPlayers = true;
+    public bool searchForNewPlayers = true;
     const int maxPlayers = 4;
 
 	void Start () {

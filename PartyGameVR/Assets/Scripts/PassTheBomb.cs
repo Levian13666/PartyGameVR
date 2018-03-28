@@ -17,6 +17,10 @@ public class PassTheBomb : MonoBehaviour {
     AudioSource audioSource;
     float bombTime;
 
+	[Header("Debug")]
+	public bool bombExploding = true;
+
+
     void Start() {
         players = GetComponent<GameController>().players;
         UI = GetComponent<GameController>().UIController.PassTheBombUI.GetComponent<PassTheBombUI>();
@@ -28,7 +32,9 @@ public class PassTheBomb : MonoBehaviour {
         if (!gameStarted) return;
 
         if (isBombInPlay) {
-            bombTime -= Time.deltaTime;
+			if (bombExploding) { // DEBUG
+				bombTime -= Time.deltaTime;
+			}
 
             if (bombTime < 0) {
                 isBombInPlay = false;
