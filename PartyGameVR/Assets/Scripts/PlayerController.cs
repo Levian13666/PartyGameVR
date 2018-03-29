@@ -23,10 +23,12 @@ public class PlayerController : MonoBehaviour {
 			}
         }
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
-		SetPlayerColor (colorIndex);
-	}
+		SetPlayerColor (true);
+        Device.SetLightColor(Color.green);
 
-	void Update() {
+    }
+
+    void Update() {
 		if (gameController.searchForNewPlayers) {
 			if (Device.LeftBumper.WasPressed) {
 				SetPlayerColor (false);
@@ -44,13 +46,24 @@ public class PlayerController : MonoBehaviour {
 
 	void SetPlayerColor(bool _nextIndex) {
 		int totalColors = gameController.playerColors.Length;
-		colorIndex = (_nextIndex) ?	colorIndex + 1 : colorIndex - 1;
-		if (colorIndex >= totalColors) {
-			colorIndex = 0;
-		} else if (colorIndex < 0) {
-			colorIndex = totalColors - 1;
-		}
-		SetPlayerColor (colorIndex);
+        for(int i = 0; i < totalColors; i++) {
+            bool colorAccepted = true;
+            colorIndex = (_nextIndex) ? colorIndex + 1 : colorIndex - 1;
+            if (colorIndex >= totalColors) {
+                colorIndex = 0;
+            } else if (colorIndex < 0) {
+                colorIndex = totalColors - 1;
+            }
+            for (int x = 0; x < gameController.players.Length; x++) {
+                if (gameController.players[x] == this || gameController.players[x] == null) continue;
+                if (gameController.players[x].colorIndex == colorIndex) {
+                    colorAccepted = false;
+                    break;
+                }
+            }
+            if (colorAccepted) break;
+        }
+        SetPlayerColor (colorIndex);
 	}
 
 	public void SetPlayerColor(int _colorIndex) {
@@ -58,5 +71,6 @@ public class PlayerController : MonoBehaviour {
 		color = _color;
 		model.GetComponent<Renderer> ().material.color = color;
 		Device.SetLightColor (color);
+        print(Device);
 	}
 }

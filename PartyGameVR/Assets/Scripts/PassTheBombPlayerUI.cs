@@ -8,9 +8,12 @@ public class PassTheBombPlayerUI : MonoBehaviour {
     [SerializeField] Text Playername;
     [SerializeField] Text TotalPoints;
     [SerializeField] Text CurrentPoints;
+    Image Background;
 
     private void Start() {
+        Background = GetComponent<Image>();
         ShowUI(false);
+
     }
 
     public void ShowUI(bool _show) {
@@ -20,9 +23,12 @@ public class PassTheBombPlayerUI : MonoBehaviour {
         GetComponent<Image>().enabled = _show;
     }
 
-    public void SetPlayername(string _name) {
+    public void SetUI(string _name, Color _color) {
         Playername.text = _name;
+        Background.color = _color;
     }
+
+    
 
     public void SetTotalPoints(float _points) {
         int points = (int)_points;

@@ -140,6 +140,7 @@ public class GameController : MonoBehaviour {
     void StartGame() {
         searchForNewPlayers = false;
         ActivatePlayerPositions(false);
+        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().isInGame = true;
         gameScripts[0].enabled = true;
     }
 
