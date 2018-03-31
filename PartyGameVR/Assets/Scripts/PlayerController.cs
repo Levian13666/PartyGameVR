@@ -71,6 +71,5 @@ public class PlayerController : MonoBehaviour {
 		color = _color;
 		model.GetComponent<Renderer> ().material.color = color;
 		Device.SetLightColor (color);
-        print(Device);
 	}
 }

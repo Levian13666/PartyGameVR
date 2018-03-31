@@ -10,7 +10,7 @@ public class PassTheBombPlayer : MonoBehaviour {
     public float currentPoints = 0;
     public PassTheBombPlayerUI playerUI;
 
-    [SerializeField] GameObject bomb;
+    [SerializeField] ParticleSystem particleSmoke;
     InputDevice inputDevice;
     PassTheBomb controller;
     int playerIndex;
@@ -23,17 +23,11 @@ public class PassTheBombPlayer : MonoBehaviour {
         inputDevice = GetComponent<PlayerController>().Device;
         controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<PassTheBomb>();
         playerUI.SetUI(GetComponent<PlayerController>().playername, GetComponent<PlayerController>().color);
-
-		inputDevice.SetLightColor (Color.red);
-
 	}
 
     void Update() {
-        bomb.SetActive(hasBomb);
-
         if (hasBomb) {
 			if (controller.isBombInPlay) {
-				inputDevice.Vibrate (bombVibHaving);
                 currentPoints += controller.pointsPrSecond * Time.deltaTime;
                 playerUI.SetCurrentPoints(currentPoints);
 
@@ -55,21 +49,31 @@ public class PassTheBombPlayer : MonoBehaviour {
             } else {
                 currentPoints = 0;
                 playerUI.SetCurrentPoints(currentPoints);
-				inputDevice.StopVibration ();
             }
         }
     }
 
 	public void BombExploded() {
-		inputDevice.Vibrate (bombVibExplode);
+        StartCoroutine(BombExplodedEnum());
 	}
+
+    IEnumerator BombExplodedEnum() {
+        particleSmoke.Play();
+        inputDevice.Vibrate(1f);
+        yield return new WaitForSeconds(1f);
+        inputDevice.Vibrate(0.3f);
+        yield return new WaitForSeconds(0.5f);
+        inputDevice.StopVibration();
+    }
 
     public void ReceiveBomb() {
         hasBomb = true;
+        inputDevice.Vibrate(bombVibHaving);
     }
 
     public void SentBomb() {
         hasBomb = false;
+        inputDevice.StopVibration();
     }
 
     public void Restart() {
@@ -77,5 +81,6 @@ public class PassTheBombPlayer : MonoBehaviour {
         totalPoints += currentPoints;
         playerUI.SetTotalPoints(totalPoints);
         currentPoints = 0;
+        particleSmoke.Stop();
     }
 }

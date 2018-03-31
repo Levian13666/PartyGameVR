@@ -10,15 +10,21 @@ public class PassTheBomb : MonoBehaviour {
     public int pointsPrSecond = 1;
     public bool gameStarted = false;
     public bool isBombInPlay = false;
+    public Transform bombPositions;
+    public Vector3 bombStartPosition;
 
+    [SerializeField] GameObject bombPrefab;
     [SerializeField] AudioClip tickingBomb;
     [SerializeField] AudioClip explodingBomb;
 
+    List<GameObject> bombsInPlay = new List<GameObject>();
+
     AudioSource audioSource;
-    float bombTime;
 
 	[Header("Debug")]
 	public bool bombExploding = true;
+    public int bombMinTime = 5;
+    public int bombMaxTime = 10;
 
 
     void Start() {
@@ -31,16 +37,7 @@ public class PassTheBomb : MonoBehaviour {
     void Update() {
         if (!gameStarted) return;
 
-        if (isBombInPlay) {
-			if (bombExploding) { // DEBUG
-				bombTime -= Time.deltaTime;
-			}
-
-            if (bombTime < 0) {
-                isBombInPlay = false;
-                BlowBomb();
-            }
-        } else {
+        if (!isBombInPlay) {
             if (Input.GetKeyDown(KeyCode.Space)) {
                 RestartGame();
                 AddBomb();
@@ -75,31 +72,53 @@ public class PassTheBomb : MonoBehaviour {
         List<int> playerIndexes = GetComponent<GameController>().GetPlayerIndexes();
         int playerIndexToGetBomb = Random.Range(0, playerIndexes.Count);
         PlayerController playerGetBomb = players[playerIndexes[playerIndexToGetBomb]];
-        playerGetBomb.GetComponent<PassTheBombPlayer>().hasBomb = true;
+        playerGetBomb.GetComponent<PassTheBombPlayer>().ReceiveBomb();
         GetComponent<GameController>().UIController.SetStatusText(playerGetBomb.playername + " har bomben!");
+
+        GameObject bomb = Instantiate(bombPrefab, bombStartPosition, Quaternion.identity);
+        bomb.GetComponent<PassTheBombBomb>().bombTime = Random.Range(bombMinTime, bombMaxTime);
+        bombsInPlay.Add(bomb);
+        PlaceBomb(bomb, playerGetBomb.index);
 
         audioSource.clip = tickingBomb;
         audioSource.loop = true;
         audioSource.Play();
-
-        bombTime = Random.Range(5f, 10f);
     }
 
-    void BlowBomb() {
-        print("Bomben sprang!");
-        audioSource.Stop();
-        //audioSource.clip = explodingBomb;
-        //audioSource.loop = false;
-        audioSource.PlayOneShot(explodingBomb);
+    void PlaceBomb(GameObject _bomb, int _playerIndex) {
+        Vector3 position = bombPositions.GetChild(_playerIndex).transform.position;
+        _bomb.GetComponent<PassTheBombBomb>().SetNewPosition(position);
+    }
 
+    public void BlowBomb() {
+        isBombInPlay = false;
+        audioSource.Stop();
+        audioSource.PlayOneShot(explodingBomb);
+        for(int i = 0; i < players.Length; i++) {
+            if (players[i] == null) continue;
+            if (players[i].GetComponent<PassTheBombPlayer>().hasBomb) {
+                players[i].GetComponent<PassTheBombPlayer>().BombExploded();
+                break;
+            }
+        }
     }
 
     public void SendBombToPlayer(int _fromIndex, int _toIndex) {
         if (players[_toIndex] == null || !isBombInPlay) {
             return;
         }
+        GameObject bomb = null;
+        for(int i = 0; i < bombsInPlay.Count; i++) {
+            if (bombsInPlay[i].transform.position == bombPositions.GetChild(_fromIndex).transform.position) {
+                bomb = bombsInPlay[i];
+                break;
+            }
+        }
 
-        print("Sender bombe til " + players[_toIndex].playername);
+        if (bomb == null) return;  
+        if (!bomb.GetComponent<PassTheBombBomb>().isStill)  return;
+        PlaceBomb(bomb, _toIndex);
+
         players[_fromIndex].GetComponent<PassTheBombPlayer>().SentBomb();
         players[_toIndex].GetComponent<PassTheBombPlayer>().ReceiveBomb();
     }
@@ -109,6 +128,10 @@ public class PassTheBomb : MonoBehaviour {
             if (player == null) continue;
             player.GetComponent<PassTheBombPlayer>().Restart();
         }
+        foreach(GameObject bomb in bombsInPlay) {
+            Destroy(bomb);
+        }
+        bombsInPlay.Clear();
     }
 
 }
