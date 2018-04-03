@@ -5,12 +5,15 @@ using InControl;
 
 public class PassTheBombPlayer : MonoBehaviour {
 
+    public bool isFreezed = false;
+    float freezeSeconds = 0;
     public bool hasBomb = false;
     public float totalPoints = 0;
     public float currentPoints = 0;
     public PassTheBombPlayerUI playerUI;
 
     [SerializeField] ParticleSystem particleSmoke;
+    [SerializeField] ParticleSystem particleFreeze;
     InputDevice inputDevice;
     PassTheBomb controller;
     int playerIndex;
@@ -44,16 +47,27 @@ public class PassTheBombPlayer : MonoBehaviour {
                 }
 
                 if (playerIndex != -1 && GetComponent<PlayerController>().index != playerIndex) {
-                    controller.SendBombToPlayer(GetComponent<PlayerController>().index, playerIndex);
+                    if (!isFreezed) {
+                        controller.SendBombToPlayer(GetComponent<PlayerController>().index, playerIndex);
+                    } else {
+                        print("Du er frosset");
+                    }
                 }
             } else {
                 currentPoints = 0;
                 playerUI.SetCurrentPoints(currentPoints);
             }
         }
+
+        if (isFreezed) {
+            freezeSeconds -= Time.deltaTime;
+            if (freezeSeconds < 0) isFreezed = false;
+        }
     }
 
 	public void BombExploded() {
+        particleFreeze.Clear();
+        particleFreeze.Stop();
         StartCoroutine(BombExplodedEnum());
 	}
 
@@ -78,9 +92,19 @@ public class PassTheBombPlayer : MonoBehaviour {
 
     public void Restart() {
         hasBomb = false;
+        isFreezed = false;
         totalPoints += currentPoints;
         playerUI.SetTotalPoints(totalPoints);
         currentPoints = 0;
+        particleSmoke.Clear();
+        particleFreeze.Clear();
         particleSmoke.Stop();
+        particleFreeze.Stop();
+    }
+
+    public void Freeze() {
+        isFreezed = true;
+        freezeSeconds = 10f;
+        particleFreeze.Play();
     }
 }

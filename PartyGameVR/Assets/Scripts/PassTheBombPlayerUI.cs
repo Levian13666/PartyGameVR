@@ -10,7 +10,7 @@ public class PassTheBombPlayerUI : MonoBehaviour {
     [SerializeField] Text CurrentPoints;
     Image Background;
 
-    private void Start() {
+    private void Awake() {
         Background = GetComponent<Image>();
         ShowUI(false);
 

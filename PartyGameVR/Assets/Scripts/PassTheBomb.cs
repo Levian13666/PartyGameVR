@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PassTheBomb : MonoBehaviour {
 
-    PlayerController[] players;
-    PassTheBombUI UI;
+    public PlayerControllerGM gmPlayer;
+    public PlayerController[] players;
+    [HideInInspector] public PassTheBombUI UI;
 
     public int pointsPrSecond = 1;
     public bool gameStarted = false;
@@ -28,6 +29,7 @@ public class PassTheBomb : MonoBehaviour {
 
 
     void Start() {
+        gmPlayer = GetComponent<GameController>().gmPlayer;
         players = GetComponent<GameController>().players;
         UI = GetComponent<GameController>().UIController.PassTheBombUI.GetComponent<PassTheBombUI>();
         audioSource = GetComponent<AudioSource>();
@@ -38,12 +40,13 @@ public class PassTheBomb : MonoBehaviour {
         if (!gameStarted) return;
 
         if (!isBombInPlay) {
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                RestartGame();
-                AddBomb();
+            if (!gmPlayer) {
+                if (Input.GetKeyDown(KeyCode.Space)) {
+                    RestartGame();
+                    AddBomb();
+                }
             }
         }
-
     }
 
     IEnumerator StartGame() {
@@ -58,25 +61,31 @@ public class PassTheBomb : MonoBehaviour {
         }
         UI.gameObject.SetActive(true);
 
+        if (gmPlayer != null) {
+            gmPlayer.GetComponent<PassTheBombGM>().enabled = true;
+        }
+
         GetComponent<GameController>().UIController.SetStatusText("Ny runde starter");
 
         yield return new WaitForSeconds(3);
 
-        AddBomb();
+        if (!gmPlayer) {
+            AddBomb();
+        }
     }
 
-    void AddBomb() {
+    public void AddBomb(int _playerIndex = -1, float _bombTime = -1f) {
         print("Placerer bombe");
 
         isBombInPlay = true;
         List<int> playerIndexes = GetComponent<GameController>().GetPlayerIndexes();
-        int playerIndexToGetBomb = Random.Range(0, playerIndexes.Count);
-        PlayerController playerGetBomb = players[playerIndexes[playerIndexToGetBomb]];
+        int playerIndexToGetBomb = (_playerIndex == -1) ? Random.Range(0, playerIndexes.Count) : _playerIndex;
+        PlayerController playerGetBomb = (_playerIndex == -1) ? players[playerIndexes[playerIndexToGetBomb]] : players[playerIndexToGetBomb];
         playerGetBomb.GetComponent<PassTheBombPlayer>().ReceiveBomb();
         GetComponent<GameController>().UIController.SetStatusText(playerGetBomb.playername + " har bomben!");
 
         GameObject bomb = Instantiate(bombPrefab, bombStartPosition, Quaternion.identity);
-        bomb.GetComponent<PassTheBombBomb>().bombTime = Random.Range(bombMinTime, bombMaxTime);
+        bomb.GetComponent<PassTheBombBomb>().bombTime = (_bombTime == -1) ? Random.Range(bombMinTime, bombMaxTime) : _bombTime;
         bombsInPlay.Add(bomb);
         PlaceBomb(bomb, playerGetBomb.index);
 
@@ -101,6 +110,7 @@ public class PassTheBomb : MonoBehaviour {
                 break;
             }
         }
+        GetComponent<GameController>().cameraController.ShakeCamera();
     }
 
     public void SendBombToPlayer(int _fromIndex, int _toIndex) {
@@ -117,6 +127,7 @@ public class PassTheBomb : MonoBehaviour {
 
         if (bomb == null) return;  
         if (!bomb.GetComponent<PassTheBombBomb>().isStill)  return;
+        if (players[_toIndex].GetComponent<PassTheBombPlayer>().isFreezed) return;
         PlaceBomb(bomb, _toIndex);
 
         players[_fromIndex].GetComponent<PassTheBombPlayer>().SentBomb();
@@ -132,6 +143,8 @@ public class PassTheBomb : MonoBehaviour {
             Destroy(bomb);
         }
         bombsInPlay.Clear();
+
+        gmPlayer.GetComponent<PassTheBombGM>().Restart();
     }
 
 }

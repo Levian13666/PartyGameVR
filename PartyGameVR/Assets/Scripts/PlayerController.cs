@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour {
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
 		SetPlayerColor (true);
         Device.SetLightColor(Color.green);
-
     }
 
     void Update() {

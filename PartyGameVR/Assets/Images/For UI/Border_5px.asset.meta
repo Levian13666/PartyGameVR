@@ -1,0 +1,35 @@
+fileFormatVersion: 2
+guid: f34491cff1c7a8c42a2780cb28b5fe7a
+timeCreated: 1522599690
+licenseType: Pro
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!-- Created
+    with Inkscape (http://www.inkscape.org/) -->\n\n<svg\n   xmlns:osb=\"http://www.openswatchbook.org/uri/2009/osb\"\n
+    \  xmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n   xmlns:cc=\"http://creativecommons.org/ns#\"\n
+    \  xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n   xmlns:svg=\"http://www.w3.org/2000/svg\"\n
+    \  xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n
+    \  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   width=\"300mm\"\n
+    \  height=\"300mm\"\n   viewBox=\"0 0 1062.9921 1062.9921\"\n   id=\"svg2\"\n
+    \  version=\"1.1\"\n   inkscape:version=\"0.91 r13725\"\n   sodipodi:docname=\"Border_5px.svg\">\n
+    \ <defs\n     id=\"defs4\">\n    <linearGradient\n       id=\"linearGradient5596\"\n
+    \      osb:paint=\"solid\">\n      <stop\n         style=\"stop-color:#000000;stop-opacity:1;\"\n
+    \        offset=\"0\"\n         id=\"stop5598\" />\n    </linearGradient>\n    <linearGradient\n
+    \      id=\"linearGradient4146\"\n       osb:paint=\"solid\">\n      <stop\n         style=\"stop-color:#000000;stop-opacity:1;\"\n
+    \        offset=\"0\"\n         id=\"stop4148\" />\n    </linearGradient>\n  </defs>\n
+    \ <sodipodi:namedview\n     id=\"base\"\n     pagecolor=\"#ffffff\"\n     bordercolor=\"#666666\"\n
+    \    borderopacity=\"1.0\"\n     inkscape:pageopacity=\"0.0\"\n     inkscape:pageshadow=\"2\"\n
+    \    inkscape:zoom=\"0.35\"\n     inkscape:cx=\"-45\"\n     inkscape:cy=\"520\"\n
+    \    inkscape:document-units=\"px\"\n     inkscape:current-layer=\"layer1\"\n
+    \    showgrid=\"false\"\n     inkscape:window-width=\"1440\"\n     inkscape:window-height=\"855\"\n
+    \    inkscape:window-x=\"0\"\n     inkscape:window-y=\"1\"\n     inkscape:window-maximized=\"1\"
+    />\n  <metadata\n     id=\"metadata7\">\n    <rdf:RDF>\n      <cc:Work\n         rdf:about=\"\">\n
+    \       <dc:format>image/svg+xml</dc:format>\n        <dc:type\n           rdf:resource=\"http://purl.org/dc/dcmitype/StillImage\"
+    />\n        <dc:title></dc:title>\n      </cc:Work>\n    </rdf:RDF>\n  </metadata>\n
+    \ <g\n     inkscape:label=\"Layer 1\"\n     inkscape:groupmode=\"layer\"\n     id=\"layer1\"\n
+    \    transform=\"translate(0,10.629921)\">\n    <rect\n       style=\"fill:#ffffff;fill-opacity:0;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1\"\n
+    \      id=\"rect3336\"\n       width=\"980\"\n       height=\"974.28571\"\n       x=\"42.857143\"\n
+    \      y=\"43.790714\"\n       ry=\"131.42857\" />\n  </g>\n</svg>\n"
+  assetBundleName: 
+  assetBundleVariant: 

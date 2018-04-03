@@ -2,27 +2,58 @@
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
+using UnityEngine.XR;
 
 public class GameController : MonoBehaviour {
 
+    [SerializeField] Transform gmPosition;
+    [SerializeField] GameObject gmPlayerPrefab;
+
     public List<MonoBehaviour> gameScripts = new List<MonoBehaviour>();
 
-    public UIController UIController;
     public GameObject playerPrefab;
     public Transform playerPositions;
     public Transform playersWrapper;
-    public PlayerController[] players = new PlayerController[4];
 	public Color[] playerColors;
+    [HideInInspector] public CameraController cameraController;
+    [HideInInspector] public UIController UIController;
+    [HideInInspector] public PlayerControllerGM gmPlayer;
+    [HideInInspector] public PlayerController[] players = new PlayerController[4];
+    [HideInInspector] public bool searchForNewPlayers = true;
 
-    public bool searchForNewPlayers = true;
-    const int maxPlayers = 4;
+    public const int maxPlayers = 4;
 
-	void Start () {
+    [Header("Debugging")]
+    public bool withGM = false;
+    public bool inVR = false;
+    [SerializeField] GameObject prefabsForDebugging;
+
+    private void Awake() {
+        prefabsForDebugging.SetActive(false); // FOR DEBUGGING
+        XRSettings.enabled = (withGM) ? inVR : false;
+    }
+
+
+    IEnumerator Start () {
         InputManager.OnDeviceDetached += OnDeviceDetached;
         UIController = GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>();
+        cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
+
+        yield return new WaitForEndOfFrame();
+
+        if (withGM) {
+            GameObject gmPlayerGO = Instantiate(gmPlayerPrefab, gmPosition);
+            gmPlayer = gmPlayerGO.GetComponent<PlayerControllerGM>();
+            gmPlayer.SetupVR(inVR);
+        }
+
+        if (inVR) {
+            XRSettings.showDeviceView = false;
+        }
+
     }
-	
-	void Update () {
+
+    void Update () {
         if (searchForNewPlayers) {
             var inputDevice = InputManager.ActiveDevice;
 
@@ -43,7 +74,6 @@ public class GameController : MonoBehaviour {
     }
 
     PlayerController FindPlayerUsingDevice(InputDevice inputDevice) {
-        var playerCount = GetPlayerCount();
         for (var i = 0; i < players.Length; i++) {
             var player = players[i];
             if (player != null) {
@@ -137,10 +167,14 @@ public class GameController : MonoBehaviour {
         return -1;
     }
 
+    public bool IsIndexAPlayer(int _index) {
+        return (players[_index] != null);
+    }
+
     void StartGame() {
         searchForNewPlayers = false;
         ActivatePlayerPositions(false);
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>().isInGame = true;
+        cameraController.isInGame = true;
         gameScripts[0].enabled = true;
     }
 
