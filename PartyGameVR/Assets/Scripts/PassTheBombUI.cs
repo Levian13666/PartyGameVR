@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PassTheBombUI : MonoBehaviour {
 
@@ -11,12 +12,14 @@ public class PassTheBombUI : MonoBehaviour {
     [SerializeField] GameObject gmBombTypesGO;
     [SerializeField] GameObject gmBombChosenGO;
     [SerializeField] GameObject gmChosePlayerTxt;
+	[SerializeField] Text[] gmBombTimesTxt;
 
     [SerializeField] GameObject gmAbilityTypesGO;
 
-    void Start() {
+    public void Setup() {
         GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         if (controller.gmPlayer != null) {
+			gmUIWrapper.gameObject.SetActive(true);
             List<int> playerIndexes = controller.GetPlayerIndexes();
             foreach (UI_GM_Player ui in gmUIPlayers) {
                 ui.gameObject.SetActive(false);
@@ -27,6 +30,10 @@ public class PassTheBombUI : MonoBehaviour {
         } else {
             gmUIWrapper.gameObject.SetActive(false);
         }
+
+		for(int i = 0; i < gmBombTimesTxt.Length; i++) {
+			gmBombTimesTxt [i].text = controller.GetComponent<PassTheBomb> ().bombTypes [i].MinimumBombTime.ToString () + "-" + controller.GetComponent<PassTheBomb> ().bombTypes [i].MaximumBombTime.ToString ();
+		}
 
         RestartRound();
     }

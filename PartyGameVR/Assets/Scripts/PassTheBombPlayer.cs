@@ -54,8 +54,6 @@ public class PassTheBombPlayer : MonoBehaviour {
                     }
                 }
             } else {
-                currentPoints = 0;
-                playerUI.SetCurrentPoints(currentPoints);
             }
         }
 
@@ -66,6 +64,9 @@ public class PassTheBombPlayer : MonoBehaviour {
     }
 
 	public void BombExploded() {
+		currentPoints = 0;
+		playerUI.SetCurrentPoints(currentPoints);
+
         particleFreeze.Clear();
         particleFreeze.Stop();
         StartCoroutine(BombExplodedEnum());
@@ -90,12 +91,15 @@ public class PassTheBombPlayer : MonoBehaviour {
         inputDevice.StopVibration();
     }
 
+	public void EndRound() {
+		totalPoints += currentPoints;
+		playerUI.SetTotalPoints(currentPoints, totalPoints);
+		currentPoints = 0;
+	}
+
     public void Restart() {
         hasBomb = false;
         isFreezed = false;
-        totalPoints += currentPoints;
-        playerUI.SetTotalPoints(totalPoints);
-        currentPoints = 0;
         particleSmoke.Clear();
         particleFreeze.Clear();
         particleSmoke.Stop();
@@ -104,7 +108,7 @@ public class PassTheBombPlayer : MonoBehaviour {
 
     public void Freeze() {
         isFreezed = true;
-        freezeSeconds = 10f;
+        freezeSeconds = 5f;
         particleFreeze.Play();
     }
 }

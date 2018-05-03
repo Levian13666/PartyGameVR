@@ -22,16 +22,22 @@ public class PassTheBomb : MonoBehaviour {
 
     AudioSource audioSource;
 
+	PlayerController lastLosingPlayer;
+
+	//AI GM
+	float aiGMtimeToFreeze = -1f;
+	bool aiGMcanFreeze = false;
+
 	[Header("Debug")]
+	public BombType[] bombTypes;
 	public bool bombExploding = true;
-    public int bombMinTime = 5;
-    public int bombMaxTime = 10;
 
 
     void Start() {
         gmPlayer = GetComponent<GameController>().gmPlayer;
         players = GetComponent<GameController>().players;
         UI = GetComponent<GameController>().UIController.PassTheBombUI.GetComponent<PassTheBombUI>();
+		UI.Setup ();
         audioSource = GetComponent<AudioSource>();
         StartCoroutine(StartGame());
     }
@@ -46,8 +52,26 @@ public class PassTheBomb : MonoBehaviour {
                     AddBomb();
                 }
             }
-        }
+		} else {
+			if (!gmPlayer) {
+				if (aiGMtimeToFreeze < 0) {
+					if (aiGMcanFreeze) {
+						FreezePlayer ();
+						aiGMtimeToFreeze = Random.Range (8f, 13f);
+					} else {
+						aiGMtimeToFreeze = Random.Range (2f, 4f);
+						aiGMcanFreeze = true;
+					}
+				} else {
+					aiGMtimeToFreeze -= Time.deltaTime;
+				}
+			}
+		}
     }
+
+	void FreezePlayer() {
+		players[GetComponent<GameController> ().GetRandomPlayerIndex ()].GetComponent<PassTheBombPlayer>().Freeze();
+	}
 
     IEnumerator StartGame() {
         gameStarted = true;
@@ -76,6 +100,7 @@ public class PassTheBomb : MonoBehaviour {
 
     public void AddBomb(int _playerIndex = -1, float _bombTime = -1f) {
         print("Placerer bombe");
+		RestartGame ();
 
         isBombInPlay = true;
         List<int> playerIndexes = GetComponent<GameController>().GetPlayerIndexes();
@@ -85,7 +110,8 @@ public class PassTheBomb : MonoBehaviour {
         GetComponent<GameController>().UIController.SetStatusText(playerGetBomb.playername + " har bomben!");
 
         GameObject bomb = Instantiate(bombPrefab, bombStartPosition, Quaternion.identity);
-        bomb.GetComponent<PassTheBombBomb>().bombTime = (_bombTime == -1) ? Random.Range(bombMinTime, bombMaxTime) : _bombTime;
+		BombType bombType = bombTypes[Random.Range (0, bombTypes.Length)];
+		bomb.GetComponent<PassTheBombBomb>().bombTime = (_bombTime == -1) ? Random.Range(bombType.MinimumBombTime, bombType.MaximumBombTime) : _bombTime;
         bombsInPlay.Add(bomb);
         PlaceBomb(bomb, playerGetBomb.index);
 
@@ -99,6 +125,27 @@ public class PassTheBomb : MonoBehaviour {
         _bomb.GetComponent<PassTheBombBomb>().SetNewPosition(position);
     }
 
+	public void SendBombToPlayer(int _fromIndex, int _toIndex) {
+		if (players[_toIndex] == null || !isBombInPlay) {
+			return;
+		}
+		GameObject bomb = null;
+		for(int i = 0; i < bombsInPlay.Count; i++) {
+			if (bombsInPlay[i].transform.position == bombPositions.GetChild(_fromIndex).transform.position) {
+				bomb = bombsInPlay[i];
+				break;
+			}
+		}
+
+		if (bomb == null) return;  
+		if (!bomb.GetComponent<PassTheBombBomb>().isStill)  return;
+		if (players[_toIndex].GetComponent<PassTheBombPlayer>().isFreezed) return;
+		PlaceBomb(bomb, _toIndex);
+
+		players[_fromIndex].GetComponent<PassTheBombPlayer>().SentBomb();
+		players[_toIndex].GetComponent<PassTheBombPlayer>().ReceiveBomb();
+	}
+
     public void BlowBomb() {
         isBombInPlay = false;
         audioSource.Stop();
@@ -107,44 +154,47 @@ public class PassTheBomb : MonoBehaviour {
             if (players[i] == null) continue;
             if (players[i].GetComponent<PassTheBombPlayer>().hasBomb) {
                 players[i].GetComponent<PassTheBombPlayer>().BombExploded();
+				lastLosingPlayer = players [i];
                 break;
             }
         }
         GetComponent<GameController>().cameraController.ShakeCamera();
+		StartCoroutine(EndRound ());
     }
 
-    public void SendBombToPlayer(int _fromIndex, int _toIndex) {
-        if (players[_toIndex] == null || !isBombInPlay) {
-            return;
-        }
-        GameObject bomb = null;
-        for(int i = 0; i < bombsInPlay.Count; i++) {
-            if (bombsInPlay[i].transform.position == bombPositions.GetChild(_fromIndex).transform.position) {
-                bomb = bombsInPlay[i];
-                break;
-            }
-        }
+	IEnumerator EndRound() {
+		foreach(PlayerController player in players) {
+			if (player == null) continue;
+			player.GetComponent<PassTheBombPlayer>().EndRound();
+		}
+		yield return new WaitForSeconds (3f);
 
-        if (bomb == null) return;  
-        if (!bomb.GetComponent<PassTheBombBomb>().isStill)  return;
-        if (players[_toIndex].GetComponent<PassTheBombPlayer>().isFreezed) return;
-        PlaceBomb(bomb, _toIndex);
+		// GetComponent<GameController> ().cameraController.RotateAroundPlayer (lastLosingPlayer.transform);
 
-        players[_fromIndex].GetComponent<PassTheBombPlayer>().SentBomb();
-        players[_toIndex].GetComponent<PassTheBombPlayer>().ReceiveBomb();
-    }
+		yield return new WaitForSeconds (3f);
+
+		ReadyForNewRound ();
+	}
+
+	void ReadyForNewRound() {
+		foreach(GameObject bomb in bombsInPlay) {
+			Destroy(bomb);
+		}
+		bombsInPlay.Clear();
+
+		if (gmPlayer != null) {
+			gmPlayer.GetComponent<PassTheBombGM>().Restart();	
+		} else {
+			aiGMcanFreeze = false;
+			aiGMtimeToFreeze = -1f;
+		}
+	}
 
     void RestartGame() {
         foreach(PlayerController player in players) {
             if (player == null) continue;
             player.GetComponent<PassTheBombPlayer>().Restart();
         }
-        foreach(GameObject bomb in bombsInPlay) {
-            Destroy(bomb);
-        }
-        bombsInPlay.Clear();
-
-        gmPlayer.GetComponent<PassTheBombGM>().Restart();
     }
 
 }

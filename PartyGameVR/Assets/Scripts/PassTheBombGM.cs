@@ -61,14 +61,14 @@ public class PassTheBombGM : MonoBehaviour {
         }
         switch(keyIndex) {
             case 0:
-                bombSeconds = Random.Range(5f, 10f);
+				bombSeconds = Random.Range(bombController.bombTypes[0].MinimumBombTime, bombController.bombTypes[0].MaximumBombTime);
                 break;
             case 1:
-                bombSeconds = Random.Range(10f, 15f);
+				bombSeconds = Random.Range(bombController.bombTypes[1].MinimumBombTime, bombController.bombTypes[1].MaximumBombTime);
                 break;
             case 2:
-                bombSeconds = Random.Range(15f, 20f);
-                break;
+				bombSeconds = Random.Range(bombController.bombTypes[2].MinimumBombTime, bombController.bombTypes[2].MaximumBombTime);
+	            break;
             default:
                 break;
         }

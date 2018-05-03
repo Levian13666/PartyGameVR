@@ -14,10 +14,12 @@ public class GameController : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform playerPositions;
     public Transform playersWrapper;
-	public Color[] playerColors;
+	//public Color[] playerColors;
+	public GameObject[] playerCharacters;
+
     [HideInInspector] public CameraController cameraController;
     [HideInInspector] public UIController UIController;
-    [HideInInspector] public PlayerControllerGM gmPlayer;
+	[HideInInspector] public PlayerControllerGM gmPlayer;
     [HideInInspector] public PlayerController[] players = new PlayerController[4];
     [HideInInspector] public bool searchForNewPlayers = true;
 
@@ -34,23 +36,21 @@ public class GameController : MonoBehaviour {
     }
 
 
-    IEnumerator Start () {
+    void Start () {
         InputManager.OnDeviceDetached += OnDeviceDetached;
         UIController = GameObject.FindGameObjectWithTag("UIController").GetComponent<UIController>();
         cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
 
-        yield return new WaitForEndOfFrame();
+        //yield return new WaitForEndOfFrame();
 
         if (withGM) {
             GameObject gmPlayerGO = Instantiate(gmPlayerPrefab, gmPosition);
             gmPlayer = gmPlayerGO.GetComponent<PlayerControllerGM>();
-            gmPlayer.SetupVR(inVR);
-        }
-
-        if (inVR) {
-            XRSettings.showDeviceView = false;
-        }
-
+			if (inVR) {
+				XRSettings.showDeviceView = false;
+				gmPlayer.SetupVR(inVR);
+			}
+		}
     }
 
     void Update () {
@@ -193,5 +193,11 @@ public class GameController : MonoBehaviour {
         }
         return playerList;
     }
+
+	public int GetRandomPlayerIndex() {
+		List<int> playerIndexes = GetPlayerIndexes ();
+		int randomPlayer = Random.Range (0, playerIndexes.Count);
+		return playerIndexes[randomPlayer];
+	}
 
 }

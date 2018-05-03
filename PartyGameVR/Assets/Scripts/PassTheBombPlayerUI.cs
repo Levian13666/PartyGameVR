@@ -24,17 +24,27 @@ public class PassTheBombPlayerUI : MonoBehaviour {
     }
 
     public void SetUI(string _name, Color _color) {
-        Playername.text = _name;
-        Background.color = _color;
-    }
+		Playername.text = _name;
+		Background.color = _color;
+	}
 
-    
-
-    public void SetTotalPoints(float _points) {
+	public void SetTotalPoints(float _currentPoints, float _points) {
         int points = (int)_points;
         TotalPoints.text = points.ToString();
-        CurrentPoints.text = "0";
+		StartCoroutine (SetTotalPointsEnum (points - (int)_currentPoints, points));
     }
+
+	IEnumerator SetTotalPointsEnum(int _old, int _new) {
+		float tempPoints = _old;
+		float tempCurrent = _new - _old;
+		while(tempPoints < _new) {
+			tempPoints += Time.deltaTime * (_new - _old) / 2f;
+			tempCurrent -= Time.deltaTime * (_new - _old) / 2f;
+			CurrentPoints.text = ((int)tempCurrent).ToString();
+			TotalPoints.text = ((int)tempPoints).ToString ();
+			yield return null;
+		}
+	}
 
     public void SetCurrentPoints(float _points) {
         int points = (int)_points;
