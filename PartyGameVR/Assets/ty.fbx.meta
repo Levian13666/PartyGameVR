@@ -177,37 +177,37 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_Hair_diffuse
-    second: {fileID: 2800000, guid: 5216b604c5ed14a2b94db7b7a549ed6b, type: 3}
+    second: {fileID: 2800000, guid: bef996b1ee0148c4095ae90d414a0558, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_Hands_diffuse
-    second: {fileID: 2800000, guid: d2c13bb9bf3eb4e4a8c4e7f4dd148c2f, type: 3}
+    second: {fileID: 2800000, guid: 551f2755b573c0a4a8cedfd6bf1ea4c9, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_Head_diffuse
-    second: {fileID: 2800000, guid: 5a8d7de8fcc92439c854d2da65f79934, type: 3}
+    second: {fileID: 2800000, guid: cc60f2a10c60a4c469288903e257f116, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_LowerBody_diffuse
-    second: {fileID: 2800000, guid: 2cac4158c68ac4264a4b7f603d5126a8, type: 3}
+    second: {fileID: 2800000, guid: c6db68840486ee246a08e9aeeb87011e, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_Scarf_diffuse
-    second: {fileID: 2800000, guid: 59ffae26909eb4062a2eda01249fbb20, type: 3}
+    second: {fileID: 2800000, guid: 794e95a10b084bc44b6f778669f712b0, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_Shoes_diffuse
-    second: {fileID: 2800000, guid: 480716c617c3a4d88a9c2758cc56dbfe, type: 3}
+    second: {fileID: 2800000, guid: 3950d95356e3dd445ae9e0f4021a5154, type: 3}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Boy_UpperBody_diffuse
-    second: {fileID: 2800000, guid: 1a893f44b7226475daff8f7f8b7f1c58, type: 3}
+    second: {fileID: 2800000, guid: 45b20f21716ec90499360aa68efdf5da, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

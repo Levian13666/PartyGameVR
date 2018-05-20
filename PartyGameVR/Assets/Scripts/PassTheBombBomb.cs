@@ -13,6 +13,14 @@ public class PassTheBombBomb : MonoBehaviour {
     bool goingToBlow;
     bool blowing;
 
+    public void TestFunction() {
+        print("Testing");
+    }
+
+    public void DoneTesting() {
+        print("DONE");
+    }
+
     void Awake() {
         isStill = true;
         goingToBlow = false;
