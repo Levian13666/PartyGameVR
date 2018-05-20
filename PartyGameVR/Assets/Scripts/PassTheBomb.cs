@@ -11,6 +11,7 @@ public class PassTheBomb : MonoBehaviour {
     public int pointsPrSecond = 1;
     public bool gameStarted = false;
     public bool isBombInPlay = false;
+	public bool canPlaceBomb = false;
     public Transform bombPositions;
     public Vector3 bombStartPosition;
 
@@ -27,6 +28,10 @@ public class PassTheBomb : MonoBehaviour {
 	//AI GM
 	float aiGMtimeToFreeze = -1f;
 	bool aiGMcanFreeze = false;
+
+	[Header("Game Settings")]
+	public int roundsPerGame = 5;
+	public int currentRound;
 
 	[Header("Debug")]
 	public BombType[] bombTypes;
@@ -45,10 +50,11 @@ public class PassTheBomb : MonoBehaviour {
     void Update() {
         if (!gameStarted) return;
 
-        if (!isBombInPlay) {
+
+		if (!isBombInPlay && canPlaceBomb) {
             if (!gmPlayer) {
                 if (Input.GetKeyDown(KeyCode.Space)) {
-                    RestartGame();
+                    RestartRound();
                     AddBomb();
                 }
             }
@@ -74,7 +80,11 @@ public class PassTheBomb : MonoBehaviour {
 	}
 
     IEnumerator StartGame() {
-        gameStarted = true;
+		currentRound = 1;
+		gameStarted = true;
+		canPlaceBomb = true;
+
+		print ("StartGame");
         for(int i = 0; i < players.Length; i++) {
             PlayerController player = players[i];
             if (player != null) {
@@ -89,7 +99,7 @@ public class PassTheBomb : MonoBehaviour {
             gmPlayer.GetComponent<PassTheBombGM>().enabled = true;
         }
 
-        GetComponent<GameController>().UIController.SetStatusText("Ny runde starter");
+		GetComponent<GameController>().UIController.SetStatusText("Runde " + currentRound);
 
         yield return new WaitForSeconds(3);
 
@@ -99,10 +109,12 @@ public class PassTheBomb : MonoBehaviour {
     }
 
     public void AddBomb(int _playerIndex = -1, float _bombTime = -1f) {
-        print("Placerer bombe");
-		RestartGame ();
+        print("AddBomb");
+		//RestartRound ();
 
         isBombInPlay = true;
+		canPlaceBomb = false;
+
         List<int> playerIndexes = GetComponent<GameController>().GetPlayerIndexes();
         int playerIndexToGetBomb = (_playerIndex == -1) ? Random.Range(0, playerIndexes.Count) : _playerIndex;
         PlayerController playerGetBomb = (_playerIndex == -1) ? players[playerIndexes[playerIndexToGetBomb]] : players[playerIndexToGetBomb];
@@ -177,10 +189,17 @@ public class PassTheBomb : MonoBehaviour {
 	}
 
 	void ReadyForNewRound() {
+		currentRound++;
+		if (currentRound > roundsPerGame) {
+			EndGame ();
+			return;
+		}
+
 		foreach(GameObject bomb in bombsInPlay) {
 			Destroy(bomb);
 		}
 		bombsInPlay.Clear();
+		canPlaceBomb = true;
 
 		if (gmPlayer != null) {
 			gmPlayer.GetComponent<PassTheBombGM>().Restart();	
@@ -188,13 +207,28 @@ public class PassTheBomb : MonoBehaviour {
 			aiGMcanFreeze = false;
 			aiGMtimeToFreeze = -1f;
 		}
+		print ("ReadyForNewRound");
+
+		if (currentRound == roundsPerGame) {
+			GetComponent<GameController>().UIController.SetStatusText("Sidste  runde");
+		} else {
+			GetComponent<GameController>().UIController.SetStatusText("Runde " + currentRound);
+		}
+
 	}
 
-    void RestartGame() {
+    void RestartRound() {
+		print ("RestartRound");
         foreach(PlayerController player in players) {
             if (player == null) continue;
             player.GetComponent<PassTheBombPlayer>().Restart();
         }
+
+
     }
+
+	void EndGame() {
+		print ("Spillet er slut");
+	}
 
 }

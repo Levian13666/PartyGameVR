@@ -23,7 +23,7 @@ public class PassTheBombGM : MonoBehaviour {
 	void Update () {
         PlayerPressed();
 
-        if (!bombController.isBombInPlay) {
+		if (bombController.canPlaceBomb) {
             // SMID BOMBE //
             IsBombPressed();
 

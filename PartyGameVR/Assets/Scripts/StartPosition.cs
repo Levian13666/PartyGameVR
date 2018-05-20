@@ -15,4 +15,8 @@ public class StartPosition : MonoBehaviour {
     public void SetStatusText(string _txt) {
         statusTxt.text = _txt;
     }
+
+	public void ShowText(bool _bool) {
+		statusTxt.gameObject.SetActive (_bool);
+	}
 }

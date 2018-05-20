@@ -8,14 +8,14 @@ public class PlayerController : MonoBehaviour {
     public InputDevice Device { get; set; }
     public string playername;
     public int index;
-	//public int colorIndex = 0;
+	public int colorIndex = 0;
 	public int characterIndex = 0;
 
 	public Color color;
 
     [SerializeField] TextMesh playernameText;
 	//[SerializeField] GameObject model;
-	[SerializeField] Transform model;
+	public Transform model;
 
 	GameController gameController;
 
@@ -26,20 +26,24 @@ public class PlayerController : MonoBehaviour {
 			}
         }
 		gameController = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameController> ();
-		//SetPlayerColor (true);
+		SetPlayerColor (true);
 		SetPlayerCharacter(true);
     }
 
     void Update() {
 		if (gameController.searchForNewPlayers) {
 			if (Device.LeftBumper.WasPressed) {
-				//SetPlayerColor (false);
 				SetPlayerCharacter(false);
 			}
 			if (Device.RightBumper.WasPressed) {
-				//SetPlayerColor (true);
 				SetPlayerCharacter(true);
 			}
+            if (Device.LeftTrigger.WasPressed) {
+                SetPlayerColor (false);
+            }
+            if (Device.RightTrigger.WasPressed) {
+                SetPlayerColor(true);
+            }
 		}
 	}
 
@@ -48,7 +52,7 @@ public class PlayerController : MonoBehaviour {
         playernameText.text = _name;
     }
 
-	/*void SetPlayerColor(bool _nextIndex) {
+	void SetPlayerColor(bool _nextIndex) {
 		int totalColors = gameController.playerColors.Length;
 		for(int i = 0; i < totalColors; i++) {
 			bool colorAccepted = true;
@@ -73,11 +77,13 @@ public class PlayerController : MonoBehaviour {
 	public void SetPlayerColor(int _colorIndex) {
 		Color _color = gameController.playerColors [_colorIndex];
 		color = _color;
-		model.GetComponent<Renderer> ().material.color = color;
+        foreach (Renderer ren in model.GetComponentsInChildren<Renderer>()) {
+            ren.material.color = color;
+        }
 		Device.SetLightColor (color);
 	}
 
-	*/
+	
 
 	void SetPlayerCharacter(bool _nextIndex) {
 		int totalCharacters = gameController.playerCharacters.Length;
@@ -102,18 +108,17 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	public void SetPlayerCharacter(int _characterIndex) {
-		print (_characterIndex);
-
 		foreach(Transform child in model) {
 			Destroy (child.gameObject);
 		}
 		GameObject _character = Instantiate(gameController.playerCharacters [_characterIndex], model);
+		playername = _character.GetComponent<ModelController> ().name;
 
-
-		/*Color _color = gameController.playerColors [_characterIndex];
+        Color _color = gameController.playerColors [colorIndex];
 		color = _color;
-		model.GetComponent<Renderer> ().material.color = color;
-		Device.SetLightColor (color);*/
+        _character.GetComponent<ModelController>().SetupModel(color);
+
+		Device.SetLightColor (color);
 
 	}
 

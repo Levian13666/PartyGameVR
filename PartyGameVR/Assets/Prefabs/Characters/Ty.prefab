@@ -1742,8 +1742,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1621259161451320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.6205573, y: -1.5371603e-18, z: 0.3461377}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
   m_Children:
   - {fileID: 4034738148567408}
   - {fileID: 4324153062624266}
@@ -2516,7 +2516,7 @@ MonoBehaviour:
       planeRotationOffset: {x: 0, y: 0, z: 0, w: 1}
     - bone: {fileID: 4609662945746752}
       target: {fileID: 0}
-      positionWeight: 0
+      positionWeight: 1
       rotationWeight: 0
       position: {x: -6.0683227, y: 1.3024772, z: 0.3131258}
       rotation: {x: 0.07795922, y: -0.027725736, z: 0.0028128396, w: 0.996567}

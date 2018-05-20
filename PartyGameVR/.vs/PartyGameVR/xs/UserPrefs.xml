@@ -1,0 +1,20 @@
+﻿<Properties StartupConfiguration="{E2C9252A-9C04-0E11-884F-F043678C1126}|">
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerController.cs">
+    <Files>
+      <File FileName="Assets/Scripts/StartPosition.cs" Line="20" Column="42" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="119" Column="70" />
+      <File FileName="Assets/Scripts/GameController.cs" Line="17" Column="5" />
+      <File FileName="Assets/Scripts/PassTheBomb.cs" Line="13" Column="26" />
+      <File FileName="Assets/ModelController.cs" Line="23" Column="27" />
+      <File FileName="Assets/Scripts/PassTheBombPlayer.cs" Line="33" Column="31" />
+      <File FileName="Assets/Scripts/PassTheBombGM.cs" Line="26" Column="7" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

@@ -73,6 +73,7 @@ public class PassTheBombPlayer : MonoBehaviour {
 	}
 
     IEnumerator BombExplodedEnum() {
+		GetComponent<PlayerController>().model.GetComponentInChildren<ModelController>().Affraid();
         particleSmoke.Play();
         inputDevice.Vibrate(1f);
         yield return new WaitForSeconds(1f);
@@ -94,6 +95,7 @@ public class PassTheBombPlayer : MonoBehaviour {
 	public void EndRound() {
 		totalPoints += currentPoints;
 		playerUI.SetTotalPoints(currentPoints, totalPoints);
+
 		currentPoints = 0;
 	}
 

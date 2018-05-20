@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour {
     public GameObject playerPrefab;
     public Transform playerPositions;
     public Transform playersWrapper;
-	//public Color[] playerColors;
+    public Color[] playerColors;
 	public GameObject[] playerCharacters;
 
     [HideInInspector] public CameraController cameraController;
@@ -116,7 +116,7 @@ public class GameController : MonoBehaviour {
             }
 
             var playerPosition = playerPositions.GetChild(playerIndex);
-
+			playerPosition.GetComponent<StartPosition> ().ShowText (false);
             GameObject go = Instantiate(playerPrefab, playerPosition);
             go.transform.parent = playersWrapper;
             PlayerController player = go.GetComponent<PlayerController>();
