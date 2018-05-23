@@ -42,18 +42,22 @@ public class GameController : MonoBehaviour {
         cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
 
         //yield return new WaitForEndOfFrame();
-
+        
         if (withGM) {
             GameObject gmPlayerGO = Instantiate(gmPlayerPrefab, gmPosition);
             gmPlayer = gmPlayerGO.GetComponent<PlayerControllerGM>();
 			if (inVR) {
 				XRSettings.showDeviceView = false;
-				gmPlayer.SetupVR(inVR);
-			}
+                if (inVR) {
+                    gmPlayer.SetupVR();
+                }
+            }
 		}
+
+
     }
 
-    void Update () {
+     void Update () {
         if (searchForNewPlayers) {
             var inputDevice = InputManager.ActiveDevice;
 
@@ -176,6 +180,7 @@ public class GameController : MonoBehaviour {
         ActivatePlayerPositions(false);
         cameraController.isInGame = true;
         gameScripts[0].enabled = true;
+        UIController.StartGame();
     }
 
     void ActivatePlayerPositions(bool _bool) {

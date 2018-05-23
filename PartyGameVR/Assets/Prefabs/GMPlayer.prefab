@@ -44,7 +44,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4362963947546836
 Transform:
   m_ObjectHideFlags: 1
@@ -53,7 +53,7 @@ Transform:
   m_GameObject: {fileID: 1207084305123694}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_Children:
   - {fileID: 4564580308882862}
   m_Father: {fileID: 0}
@@ -133,6 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerKeys: 7a000000730000006100000077000000
+  playerVRPrefab: {fileID: 1320469093821894, guid: 0b6e6d0acbb61f047b50f8717b9c8a7e,
+    type: 2}
   vrCamera: {fileID: 1790628136970228}
 --- !u!124 &124073194758322892
 Behaviour:

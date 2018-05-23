@@ -7,8 +7,10 @@ public class PlayerControllerGM : MonoBehaviour {
 
     public KeyCode[] playerKeys = new KeyCode[GameController.maxPlayers];
 
+    [SerializeField] GameObject playerVRPrefab;
     [SerializeField] GameObject vrCamera;
 
+    GameObject playerVR;
     GameController gameController;
 
 	void Start () {
@@ -18,11 +20,11 @@ public class PlayerControllerGM : MonoBehaviour {
             }
         }
         gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        vrCamera.SetActive(gameController.inVR);
+        
     }
 
-    public void SetupVR(bool _isVR) {
-        // Mangler
+    public void SetupVR() {
+        playerVR = Instantiate(playerVRPrefab, transform);
     }
 
 }

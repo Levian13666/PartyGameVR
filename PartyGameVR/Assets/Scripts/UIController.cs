@@ -13,6 +13,10 @@ public class UIController : MonoBehaviour {
         PassTheBombUI.SetActive(false);
     }
 
+    public void StartGame() {
+        //MainMenuUI.StartGame();
+    }
+
     public void SetStatusText(string _txt) {
         statusTxt.gameObject.SetActive(true);
         statusTxt.GetComponentInChildren<Text>().text = _txt;
