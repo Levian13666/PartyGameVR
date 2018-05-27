@@ -6,16 +6,18 @@ using UnityEngine.XR;
 
 public class GameController : MonoBehaviour {
 
-    [SerializeField] Transform gmPosition;
-    [SerializeField] GameObject gmPlayerPrefab;
+	[Header("Data")]
+	public List<MonoBehaviour> gameScripts = new List<MonoBehaviour>();
+	public Color[] playerColors;
+	public GameObject[] playerCharacters;
 
-    public List<MonoBehaviour> gameScripts = new List<MonoBehaviour>();
+	[Header("Referencer")]
+    [SerializeField] GameObject gmPlayerPrefab;
+	[SerializeField] Transform gmPosition;
 
     public GameObject playerPrefab;
     public Transform playerPositions;
     public Transform playersWrapper;
-    public Color[] playerColors;
-	public GameObject[] playerCharacters;
 
     [HideInInspector] public CameraController cameraController;
     [HideInInspector] public UIController UIController;
